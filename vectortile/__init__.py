@@ -2,9 +2,9 @@ from TileBounds import TileBounds
 from Bbox import Bbox
 from Tile import Tile
 
-__version__ = 0.1
+__version__ = 1.0
 __author__ = 'Paul Woods'
-__source__ = 'https://github.com/SkyTruth/pelagos/vectortile'
+__source__ = 'https://github.com/SkyTruth/vectortile'
 __license__ = """The MIT License (MIT)
 
 Copyright (c) 2014 SkyTruth
