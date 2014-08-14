@@ -1,4 +1,13 @@
-vectortile
-==========
+Vector Tile Tools
+=================
 
-Classes for serving tiled vector data 
+A set of classes for managing tiles geospatial vector data
+
+Install
+=======
+
+Test
+====
+
+
+
