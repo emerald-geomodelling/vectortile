@@ -23,7 +23,7 @@ class Tile(object):
         """
         if not meta:
             meta = dict()
-        return Tile(TypedMatrix.pack(data, extra_header_fields=meta, columns=columns), meta=meta)
+        return Tile(TypedMatrix.pack(data, extra_header_fields=meta, columns=columns, orientation='columnwise'), meta=meta)
 
     @staticmethod
     def nodata(complete_ancestor_bounds=None):
