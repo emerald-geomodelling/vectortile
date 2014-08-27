@@ -48,7 +48,7 @@ For example, a TypedMatrix with 2 rows and 3 columns:
 
 ### Usage Examples
 
-    >>> from typedmatrix import TypedMatrix
+    >>> from vectortile import TypedMatrix
     >>> from datetime import datetime
     >>> from pprint import pprint
 

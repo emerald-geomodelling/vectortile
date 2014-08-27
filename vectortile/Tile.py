@@ -1,5 +1,5 @@
 from datetime import datetime
-from typedmatrix import TypedMatrix
+from vectortile import TypedMatrix
 
 
 class Tile(object):
