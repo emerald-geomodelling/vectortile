@@ -7,7 +7,7 @@ from distutils.core import setup
 
 
 setup(name='vectortile',
-      version='1.1',
+      version='1.1.1',
       author='Paul Woods',
       author_email='paul@skytruth.org',
       description='',
