@@ -3,7 +3,7 @@ from Bbox import Bbox
 from Tile import Tile
 import TypedMatrix
 
-__version__ = '1.2.3'
+__version__ = '1.2.4'
 __author__ = 'Paul Woods'
 __source__ = 'https://github.com/SkyTruth/vectortile'
 __license__ = """The MIT License (MIT)

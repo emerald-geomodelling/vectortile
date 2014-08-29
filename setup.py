@@ -14,4 +14,6 @@ setup(name='vectortile',
       long_description=vectortile.__doc__,
       url=vectortile.__source__,
       license=vectortile.__license__,
-      packages=['vectortile', 'vectortile.tests'])
+      packages=['vectortile', 'vectortile.tests'],
+      install_requires=['python-geohash']
+)

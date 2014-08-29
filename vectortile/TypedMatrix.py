@@ -28,12 +28,6 @@ typeformatmap = {
 typedefaultmap = {
     'Float32': 0.0,
 }
-orientation_map = {
-    'rowwise': 'r',
-    'columnwise': 'c'
-}
-orientation_unpack_map = {v: k for k, v in orientation_map.items()}
-
 
 def get_columns(data):
     """
@@ -111,22 +105,22 @@ def pack(data, extra_header_fields=None, columns=None, orientation='rowwise'):
             if col['name'] in colsByName:
                 col.update(colsByName[col['name']])
 
+    header['version'] = version
+    if orientation is None:
+        raise ValueError ('TypedMatrix: unknown orientation %s' % orientation)
+    header['orientation'] = orientation
+
     f = StringIO.StringIO()
     headerstr = json.dumps(header)
 
     # write "magic" file format token at the start
     f.write(struct.pack('<%sc' % len(magic), *magic))
-    f.write(struct.pack('<i', version))
-    orientation = orientation_map.get(orientation)
-    if orientation is None:
-        raise ValueError ('TypedMatrix: unknown orientation %s' % orientation)
-    f.write(struct.pack("<c", orientation))
     f.write(struct.pack("<i", len(headerstr)))
     f.write(headerstr)
 
     colspecs = [{'name': col['name'], 'type': col['type'], 'default': typedefaultmap[col['type']]} for col in columns]
 
-    if orientation == 'r':
+    if orientation == 'rowwise':
         for d in data:
             f.write(struct.pack(
                 row_fmt(columns),
@@ -160,22 +154,19 @@ def unpack(packed_str):
     # read "magic" file format token
     token = ''.join(_struct_read(f, 'c', len(magic)))
     assert(token == magic)
-    ver = _struct_read(f,'i')
-    assert (ver == version)  # only supports one version right now
-
-    orientation = _struct_read(f,'c')
-    assert (orientation in orientation_unpack_map)
 
     header_len = _struct_read(f,'i')
     header = json.loads(f.read(header_len))
 
-    if orientation == 'r':
+    assert (header['version'] == version)  # only supports one version right now
+
+    if header['orientation'] == 'rowwise':
         fmt = row_fmt(header['cols'])
         data = []
         col_names = [col['name'] for col in header['cols']]
         for i in range(0, header['length']):
             data.append(dict(zip(col_names, struct.unpack(fmt, f.read(struct.calcsize(fmt))))))
-    else:
+    elif header['orientation'] == 'columnwise':
         col_data = []
         col_names = [col['name'] for col in header['cols']]
         length = header['length']
@@ -188,6 +179,8 @@ def unpack(packed_str):
             data = [dict(zip(col_names, [col_data[c] for c in col_indexes]))]
         else:
             data = []
+    else:
+        raise Exception("Unsupported orientation")
 
     return header, data
 
