@@ -1,6 +1,8 @@
 # Vector Tile Tools
 A set of classes for managing tiles of geospatial vector data
 
+[![Build Status](https://travis-ci.org/SkyTruth/vectortile.svg)](https://travis-ci.org/SkyTruth/vectortile)
+
 ## Installation
 TODO: Make this pip-installable
 
