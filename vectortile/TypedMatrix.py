@@ -1,6 +1,10 @@
 """
 TypedMatrix.py - read/write TypedMatrix format
 """
+
+magic = 'tmtx' # Must be four bytes long!
+version = 2
+
 import StringIO
 import struct
 import json
@@ -10,13 +14,12 @@ from datetime import datetime
 # Header Structure
 # {
 #   length: count of rows of data
+#   version: format version
 #   cols: array of column definitions
 #       [{}
 #       ]
 # }
 
-magic = 'tmtx'
-version = 1
 typemap = {
     int: 'Float32',
     float: 'Float32',
@@ -112,6 +115,9 @@ def pack(data, extra_header_fields=None, columns=None, orientation='rowwise'):
 
     f = StringIO.StringIO()
     headerstr = json.dumps(header)
+    paddinglen = (4 - len(headerstr) % 4) % 4
+    headerstr += (" " * paddinglen)
+
 
     # write "magic" file format token at the start
     f.write(struct.pack('<%sc' % len(magic), *magic))
