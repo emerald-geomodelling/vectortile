@@ -73,10 +73,10 @@ class TypedMatrixTest(unittest2.TestCase):
         self.assertEqual(3, header['length'])
         self.assertListEqual(data_in, data_out)
 
-        data_in = [{'A': 1, 'B': 2}]
+        data_in = [{'AA': 1, 'BB': 2}, {'AA': 11, 'BB': 22}]
         packed_str = TypedMatrix.pack(data_in, orientation='columnwise')
         header, data_out = TypedMatrix.unpack(packed_str)
-        self.assertEqual(1, header['length'])
+        self.assertEqual(2, header['length'])
         self.assertListEqual(data_in, data_out)
 
     def test_empty(self):

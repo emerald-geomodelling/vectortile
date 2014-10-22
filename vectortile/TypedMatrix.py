@@ -115,7 +115,7 @@ def pack(data, extra_header_fields=None, columns=None, orientation='rowwise'):
 
     f = StringIO.StringIO()
     headerstr = json.dumps(header)
-    paddinglen = (4 - len(header) % 4) % 4
+    paddinglen = (4 - len(headerstr) % 4) % 4
     headerstr += (" " * paddinglen)
 
 
