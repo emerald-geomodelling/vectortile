@@ -115,14 +115,14 @@ def pack(data, extra_header_fields=None, columns=None, orientation='rowwise'):
 
     f = StringIO.StringIO()
     headerstr = json.dumps(header)
-    headerlen = len(headerstr)
-    paddinglen = (4 - headerlen % 4) % 4
+    paddinglen = (4 - len(header) % 4) % 4
+    headerstr += (" " * paddinglen)
+
 
     # write "magic" file format token at the start
     f.write(struct.pack('<%sc' % len(magic), *magic))
-    f.write(struct.pack("<i", headerlen))
+    f.write(struct.pack("<i", len(headerstr)))
     f.write(headerstr)
-    f.write(" " * paddinglen)
 
     colspecs = [{'name': col['name'], 'type': col['type'], 'default': typedefaultmap[col['type']]} for col in columns]
 
