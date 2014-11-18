@@ -29,7 +29,7 @@ class Tile(object):
     def nodata(complete_ancestor_bounds=None):
         meta = dict(nodata=True)
         if complete_ancestor_bounds:
-            meta['complete_ancestor'] = str(complete_ancestor_bounds)
+            meta['complete_ancestor'] = str(complete_ancestor_bounds.get_bbox())
         return Tile.fromdata(data=dict(), meta=meta)
 
     def is_nodata(self):
