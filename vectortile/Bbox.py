@@ -13,7 +13,9 @@ class Bbox(object):
 
     def __str__(self):
         def f(v):
-            return "{:.5f}".format(v)
+            # Format v as javascript toString():
+            if (v == 0.0): return "0"
+            return str(v).rstrip("0").rstrip(".")
 
         # left,bottom,right,top - all according to openlayers :)
         return "%s,%s,%s,%s" % (f(self.lonmin), f(self.latmin), f(self.lonmax), f(self.latmax))
