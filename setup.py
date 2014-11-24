@@ -3,24 +3,26 @@
 import os.path
 import distutils.core
 
-info = {}
-execfile(os.path.join(os.path.split(__file__)[0], 'vectortile', 'version.py'), info)
-del info['__builtins__']
+import vectortile
 
 with open('README.md') as f:
-    doc = f.read()
+    readme = f.read()
+
+with open('requirements.txt') as f:
+    requirements = [l for l in f.readlines() if l]
 
 distutils.core.setup(
     name='vectortile',
-    description=doc,
-    long_description=doc,
-    packages=['vectortile', 'vectortile.tests'],
-    install_requires=["python-geohash==0.8.4"],
-    extras_require = {'test':  ["docopt==0.6.2", "nose==1.3.1", "unittest2==0.5.1"]},
-    
-    version = info['__version__'],
-    author = info['__author__'],
-    author_email = info['__author_email__'],
-    url= info['__source__'],
-    license= info ['__license__']
+    description=readme,
+    long_description=readme,
+    packages=[
+        'vectortile',
+        'vectortile.tests'
+    ],
+    install_requires=requirements,
+    version=vectortile.__version__,
+    author=vectortile.__author__,
+    author_email=vectortile.__author_email__,
+    url=vectortile.__source__,
+    license=vectortile.__license__
 )
