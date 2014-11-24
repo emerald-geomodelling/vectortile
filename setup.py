@@ -13,7 +13,7 @@ with open('requirements.txt') as f:
 
 distutils.core.setup(
     name='vectortile',
-    description=readme,
+    description="A set of classes for managing tiles of geospatial vector data",
     long_description=readme,
     packages=[
         'vectortile',
