@@ -3,7 +3,12 @@
 import os.path
 import distutils.core
 
-import vectortile
+# Don't import vectortile here, that would create loops. Just load
+# this one file that doesn't import anything.
+
+versionpy = os.path.join(os.path.split(os.path.abspath(__file__))[0], "vectortile/version.py")
+version = {}
+execfile(versionpy, version)
 
 with open('README.md') as f:
     readme = f.read()
@@ -20,9 +25,9 @@ distutils.core.setup(
         'vectortile.tests'
     ],
     install_requires=requirements,
-    version=vectortile.__version__,
-    author=vectortile.__author__,
-    author_email=vectortile.__author_email__,
-    url=vectortile.__source__,
-    license=vectortile.__license__
+    version=version['__version__'],
+    author=version['__author__'],
+    author_email=version['__author_email__'],
+    url=version['__source__'],
+    license=version['__license__']
 )
