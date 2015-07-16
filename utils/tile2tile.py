@@ -11,6 +11,7 @@ Usage:
 Options:
   -f FORMAT --format=FORMAT    Output format: (tile | json) [default: tile]
   --srcformat=SRC_FORMAT    Source file format: (tile | json)
+  --header=HEADER    JSON file with extra header data
   -h --help     Show this screen.
   --version     Show version.
   -q --quiet    be quiet
@@ -22,7 +23,7 @@ import sys, logging, json
 from vectortile import Tile
 
 
-def transform(infile_name, src_format, outfile_name, dest_format):
+def transform(infile_name, src_format, outfile_name, dest_format, header):
 
     with sys.stdin if infile_name is None or '-' == infile_name else open(infile_name, 'rb') as file_in:
         with sys.stdout if outfile_name is None or '-' == outfile_name else open(outfile_name, 'w') as file_out:
@@ -41,6 +42,13 @@ def transform(infile_name, src_format, outfile_name, dest_format):
                     dest_tile = Tile.fromdata(src_tile)
             else:
                 dest_tile = Tile(file_in.read())
+
+            if header:
+                with open(header) as f:
+                    header = json.load(f)
+                meta, data = dest_tile.unpack()
+                meta.update(header)
+                dest_tile = Tile.fromdata(data, meta)
 
             if dest_format == 'json':
                 json.dump(dest_tile.asdict(), file_out, indent=4)
@@ -68,7 +76,7 @@ def main():
         return 0
 
     try:
-        transform(arguments['SOURCE'], arguments['--srcformat'], arguments['DEST'], arguments['--format'])
+        transform(arguments['SOURCE'], arguments['--srcformat'], arguments['DEST'], arguments['--format'], arguments['--header'])
     except IOError, e:
         logging.error(e)
         return 0
