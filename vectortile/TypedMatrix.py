@@ -22,6 +22,7 @@ from datetime import datetime
 
 typemap = {
     int: 'Float32',
+    long: 'Float32',
     float: 'Float32',
     datetime: 'Float32',
 }
