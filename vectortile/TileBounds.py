@@ -1,7 +1,7 @@
 import math
 import quadtree
 
-from Bbox import Bbox
+from .Bbox import Bbox
 
 class TileBounds(object):
     maxzoom = 21

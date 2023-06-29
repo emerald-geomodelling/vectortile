@@ -2,10 +2,10 @@
 TypedMatrix.py - read/write TypedMatrix format
 """
 
-magic = 'tmtx' # Must be four bytes long!
+magic = b'tmtx' # Must be four bytes long!
 version = 2
 
-import StringIO
+import io
 import struct
 import json
 import calendar
@@ -22,7 +22,6 @@ from datetime import datetime
 
 typemap = {
     int: 'Float32',
-    long: 'Float32',
     float: 'Float32',
     datetime: 'Float32',
 }
@@ -44,14 +43,14 @@ def get_columns(data):
 
     cols = {}
     for i, d in enumerate(data):
-        for key, value in d.iteritems():
+        for key, value in d.items():
             t = type(value)
             if t not in typemap:
                 raise TypeError ('TypedMatrix: "%s" is not a supported type in field "%s"' % (type(value), key))
             if key not in cols:
                 cols[key] = {'name': key, 'type': typemap[t]}
-    cols = cols.values()
-    cols.sort(lambda a, b: cmp(a['name'], b['name']))
+    cols = list(cols.values())
+    cols.sort(key=lambda a: a['name'])
     return cols
 
 
@@ -114,14 +113,14 @@ def pack(data, extra_header_fields=None, columns=None, orientation='rowwise'):
         raise ValueError ('TypedMatrix: unknown orientation %s' % orientation)
     header['orientation'] = orientation
 
-    f = StringIO.StringIO()
-    headerstr = json.dumps(header)
+    f = io.BytesIO()
+    headerstr = json.dumps(header).encode("utf-8")
     paddinglen = (4 - len(headerstr) % 4) % 4
-    headerstr += (" " * paddinglen)
+    headerstr += (b" " * paddinglen)
 
 
     # write "magic" file format token at the start
-    f.write(struct.pack('<%sc' % len(magic), *magic))
+    f.write(struct.pack('<%ss' % len(magic), magic))
     f.write(struct.pack("<i", len(headerstr)))
     f.write(headerstr)
 
@@ -156,14 +155,14 @@ def unpack(packed_str):
     Unpack a binary packed string containing a TypedMatrix.   Returns a tuple of header and data
     header is a dict and data is a list of dicts
     """
-    f = StringIO.StringIO(packed_str)
+    f = io.BytesIO(packed_str)
 
     # read "magic" file format token
-    token = ''.join(_struct_read(f, 'c', len(magic)))
+    token = b''.join(_struct_read(f, 'c', len(magic)))
     assert(token == magic)
 
     header_len = _struct_read(f,'i')
-    header = json.loads(f.read(header_len))
+    header = json.loads(f.read(header_len).decode("utf-8"))
 
     assert (header['version'] == version)  # only supports one version right now
 

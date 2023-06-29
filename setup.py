@@ -8,7 +8,8 @@ import distutils.core
 
 versionpy = os.path.join(os.path.split(os.path.abspath(__file__))[0], "vectortile/version.py")
 version = {}
-execfile(versionpy, version)
+with open(versionpy) as f:
+    exec(f.read(), version)
 
 with open('README.md') as f:
     readme = f.read()
