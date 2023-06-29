@@ -64,7 +64,7 @@ class TypedMatrixTest(unittest2.TestCase):
         self.assertRaises(TypeError, TypedMatrix.pack, data_in)
 
     def test_bad_format(self):
-        self.assertRaises(AssertionError, TypedMatrix.unpack, packed_str='not valid')
+        self.assertRaises(AssertionError, TypedMatrix.unpack, packed_str=b'not valid')
 
     def test_columnwise(self):
         data_in = [{'A': 1, 'B': 2}, {'A': 11, 'B': 22}, {'A': 111, 'B': 222}]
