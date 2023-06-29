@@ -10,6 +10,10 @@ import struct
 import json
 import calendar
 from datetime import datetime
+try:
+    import pandas
+except:
+    pandas = None
 
 # Header Structure
 # {
@@ -25,6 +29,8 @@ typemap = {
     float: 'Float32',
     datetime: 'Float32',
 }
+if pandas:
+    typemap[pandas.Timestamp] = 'Float32'
 typeformatmap = {
     'Float32': 'f',
 }
@@ -88,6 +94,9 @@ def pack(data, extra_header_fields=None, columns=None, orientation='rowwise'):
     for column-wise oreintation it is stored as a list of columns.
     """
 
+    if hasattr(data, "to_dict"):
+        data = data.to_dict('records')
+    
     # make data iterable
     if type(data) is dict:
         data = [data]

@@ -1,4 +1,4 @@
-__version__ = '1.4.0'
+__version__ = '1.4.1'
 __author__ = 'Paul Woods, Egil Moeller'
 __author_email__ = 'paul@skytruth.org, em@emrld.no'
 __source__ = 'https://github.com/emerald-geomodelling/vectortile'
